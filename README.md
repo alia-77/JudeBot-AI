@@ -55,8 +55,8 @@ JudeBot/
 Clone the repository
 
 ```bash
-git clone https://github.com/YOUR_USERNAME/JudeBot.git
-cd JudeBot
+git clone https://github.com/alia-77/JudeBot-AI.git
+cd JudeBot-AI
 ```
 
 Create a virtual environment
