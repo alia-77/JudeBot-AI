@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JudeBot</title>
+
+    <link rel="stylesheet" href="/static/style.css">
+
+    <!-- Markdown -->
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+
+    <!-- Highlight.js -->
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css">
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+</head>
+
+<body>
+
+<div class="container">
+
+    <header>
+
+        <h1>JudeBot</h1>
+
+        <p>Your AI Assistant</p>
+
+        <button id="clearBtn">
+            Clear Chat
+        </button>
+
+    </header>
+
+    <div id="chat-box"></div>
+
+    <div id="typing" class="hidden">
+        JudeBot is thinking...
+    </div>
+
+    <div class="input-container">
+
+        <textarea
+            id="message"
+            rows="1"
+            placeholder="Message JudeBot..."
+        ></textarea>
+
+        <div class="buttons">
+
+            <button id="uploadBtn">
+                📎
+            </button>
+
+            <button id="sendBtn">
+                Send
+            </button>
+
+        </div>
+
+    </div>
+
+    <input
+        type="file"
+        id="fileInput"
+        hidden
+    >
+
+</div>
+
+<script src="/static/script.js"></script>
+
+</body>
+
+</html>
