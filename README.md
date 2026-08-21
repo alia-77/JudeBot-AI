@@ -55,11 +55,7 @@ JudeBot/
 Clone the repository
 
 ```bash
-<<<<<<< HEAD
-git clone https://github.com/alia-77/JudeBot-AI.git
-=======
 git clone https://github.com/alia-77/JudeBot-AI
->>>>>>> 1f43532 (Update JudeBot README)
 cd JudeBot-AI
 ```
 
