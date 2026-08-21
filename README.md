@@ -107,3 +107,8 @@ http://127.0.0.1:8000
 - Multiple-document RAG
 - Public deployment
 
+---
+
+## Development
+
+The `language-tutor` branch is the experimental development branch for evolving JudeBot into an AI-powered language-learning application.
