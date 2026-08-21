@@ -55,7 +55,11 @@ JudeBot/
 Clone the repository
 
 ```bash
+<<<<<<< HEAD
 git clone https://github.com/alia-77/JudeBot-AI.git
+=======
+git clone https://github.com/alia-77/JudeBot-AI
+>>>>>>> 1f43532 (Update JudeBot README)
 cd JudeBot-AI
 ```
 
@@ -104,8 +108,6 @@ http://127.0.0.1:8000
 - User authentication
 - SQLite database
 - Persistent conversation history
-- Multiple uploaded documents
-- Image analysis
+- Multiple-document RAG
 - Public deployment
-
 
