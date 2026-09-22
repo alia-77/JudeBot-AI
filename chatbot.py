@@ -1,37 +1,24 @@
-from google import genai
 from datetime import datetime
 
-from rag import retrieve_context
+from google import genai
+
 from config import GEMINI_API_KEY, MODEL_NAME
+from language_tutor.tutor import build_tutor_prompt
+from language_tutor.translator import FrenchEnglishTranslator
+from rag import retrieve_context
+
 
 client = genai.Client(api_key=GEMINI_API_KEY)
+translator = FrenchEnglishTranslator()
+
 
 def ask_gemini(prompt, history, image_path=None):
-
     from PIL import Image
 
     today = datetime.now().strftime("%B %d, %Y")
+    system_prompt = build_tutor_prompt(today)
 
-    system_prompt = f"""
-You are JudeBot.
-
-You are a friendly, intelligent AI assistant.
-
-Today's date is {today}.
-
-Always answer clearly and professionally.
-
-When appropriate:
-- use Markdown
-- explain concepts with examples
-- format code properly
-
-If the user uploads a document, base your answers primarily on that document.
-"""
-
-    # Image uploaded
     if image_path:
-
         image = Image.open(image_path)
 
         response = client.models.generate_content(
@@ -39,8 +26,8 @@ If the user uploads a document, base your answers primarily on that document.
             contents=[
                 system_prompt,
                 image,
-                prompt
-            ]
+                prompt,
+            ],
         )
 
         history.append(("user", prompt))
@@ -48,24 +35,31 @@ If the user uploads a document, base your answers primarily on that document.
 
         return response.text, history
 
-    # Document RAG
+    translation = translator.translate(prompt)
+    tutor_prompt = f"""
+French:
+{prompt}
+
+English translation:
+{translation}
+"""
+
     context = retrieve_context(prompt)
 
     if context:
-        prompt = f"""
+        tutor_prompt = f"""
 Use the following document to answer the user's question.
 
 Document:
 {context}
 
-Question:
-{prompt}
+{tutor_prompt}
 """
 
     contents = [
         {
             "role": "user",
-            "parts": [{"text": system_prompt}]
+            "parts": [{"text": system_prompt}],
         }
     ]
 
@@ -73,26 +67,27 @@ Question:
         contents.append(
             {
                 "role": role,
-                "parts": [{"text": text}]
+                "parts": [{"text": text}],
             }
         )
 
     contents.append(
         {
             "role": "user",
-            "parts": [{"text": prompt}]
+            "parts": [{"text": tutor_prompt}],
         }
     )
 
     response = client.models.generate_content(
         model=MODEL_NAME,
-        contents=contents
+        contents=contents,
     )
 
     history.append(("user", prompt))
     history.append(("model", response.text))
 
     return response.text, history
+
 
 def clear_history():
     pass
