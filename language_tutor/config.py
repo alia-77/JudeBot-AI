@@ -1,0 +1,2 @@
+TUTOR_LANGUAGE = "French"
+TUTOR_TARGET_LANGUAGE = "English"
