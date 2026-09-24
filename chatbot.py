@@ -9,7 +9,16 @@ from rag import retrieve_context
 
 
 client = genai.Client(api_key=GEMINI_API_KEY)
-translator = FrenchEnglishTranslator()
+translator = None
+
+
+def get_translator():
+    global translator
+
+    if translator is None:
+        translator = FrenchEnglishTranslator()
+
+    return translator
 
 
 def ask_gemini(prompt, history, image_path=None, mode="chat"):
@@ -40,15 +49,15 @@ def ask_gemini(prompt, history, image_path=None, mode="chat"):
         return response.text, history
 
     if mode == "tutor":
-        translation = translator.translate(prompt)
+        translation = get_translator().translate(prompt)
 
         tutor_prompt = f"""
-    French:
-    {prompt}
+French:
+{prompt}
 
-    English translation:
-    {translation}
-    """
+English translation:
+{translation}
+"""
     else:
         tutor_prompt = prompt
 
