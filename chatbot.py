@@ -12,11 +12,15 @@ client = genai.Client(api_key=GEMINI_API_KEY)
 translator = FrenchEnglishTranslator()
 
 
-def ask_gemini(prompt, history, image_path=None):
+def ask_gemini(prompt, history, image_path=None, mode="chat"):
     from PIL import Image
 
     today = datetime.now().strftime("%B %d, %Y")
-    system_prompt = build_tutor_prompt(today)
+
+    if mode == "tutor":
+        system_prompt = build_tutor_prompt(today)
+    else:
+        system_prompt = ""
 
     if image_path:
         image = Image.open(image_path)
@@ -35,14 +39,18 @@ def ask_gemini(prompt, history, image_path=None):
 
         return response.text, history
 
-    translation = translator.translate(prompt)
-    tutor_prompt = f"""
-French:
-{prompt}
+    if mode == "tutor":
+        translation = translator.translate(prompt)
 
-English translation:
-{translation}
-"""
+        tutor_prompt = f"""
+    French:
+    {prompt}
+
+    English translation:
+    {translation}
+    """
+    else:
+        tutor_prompt = prompt
 
     context = retrieve_context(prompt)
 
@@ -56,12 +64,15 @@ Document:
 {tutor_prompt}
 """
 
-    contents = [
-        {
-            "role": "user",
-            "parts": [{"text": system_prompt}],
-        }
-    ]
+    contents = []
+
+    if system_prompt:
+        contents.append(
+            {
+                "role": "user",
+                "parts": [{"text": system_prompt}],
+            }
+        )
 
     for role, text in history:
         contents.append(

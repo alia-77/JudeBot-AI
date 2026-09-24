@@ -39,10 +39,13 @@ async def chat(request: Request):
     # reply, history = ask_gemini(message, history)
 
     image_path = request.session.get("image_path")
+    mode = request.session.get("mode", "chat")
+
     reply, history = ask_gemini(
         message,
         history,
-        image_path
+        image_path,
+        mode
     )
 
     request.session["history"] = history
@@ -52,6 +55,22 @@ async def chat(request: Request):
             "reply": reply
         }
     )
+
+
+@app.post("/mode")
+async def set_mode(request: Request):
+    data = await request.json()
+    mode = data.get("mode", "chat")
+
+    if mode not in ["chat", "tutor"]:
+        return JSONResponse(
+            {"error": "Invalid mode."},
+            status_code=400
+        )
+
+    request.session["mode"] = mode
+
+    return {"mode": mode}
 
 
 @app.post("/clear")
