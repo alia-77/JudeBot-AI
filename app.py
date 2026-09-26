@@ -77,6 +77,7 @@ async def set_mode(request: Request):
 async def clear(request: Request):
 
     request.session["history"] = []
+    request.session["image_path"] = None
 
     clear_history()
 
